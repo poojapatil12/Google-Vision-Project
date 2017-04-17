@@ -57,6 +57,7 @@ def get_payload(uri, types, max_results):
 
     # GCS URIs are supported out of the box
     if uri.startswith("gs://"):
+	print "lo ji "
         payload = {
             'requests': [{
                 'image':{'source':{'gcsImageUri': uri}},
@@ -66,6 +67,7 @@ def get_payload(uri, types, max_results):
 
     # Web URIs need to be downloaded and base64 encoded
     elif uri.startswith("http://") or uri.startswith("https://"):
+	print "o ji "
         image_raw = urllib2.urlopen(uri).read()
         image_b64 = base64.b64encode(image_raw)
 
@@ -78,8 +80,13 @@ def get_payload(uri, types, max_results):
 
     # Local files just needs be base64 encoded
     else:
+	print "a ji "
         filename = os.path.join(os.path.dirname(__file__), uri)
+	filename = "/home/poojapatil/Google-Vision-API-quickfix/myproject" + filename
+	print(filename)
+	print "wtf"
         image_raw = open(filename, 'rb').read()
+	print "i m tired "
         image_b64 = base64.b64encode(image_raw)
 
         payload = {
@@ -97,17 +104,35 @@ def make_request(service, payload):
 
 def main(uris, types, max_results, output):
     service = get_vision_service()
-
+   # x = "Intruder Alert"
+   # y = "You are safe"
+    print "dilwale dulhNIYa le jayenge"
+    print(uris)
+    print(types)
+    print(max_results)
+    print(output)
+    print(service)
+	
     for uri in uris:
-        uri = uri.strip()
-        payload = get_payload(uri, types, max_results)
+        #uri = uri.strip()
+	print(uri)
+	print "cheP thrills"
+        payload = get_payload(uris, types, max_results)
+	print "sad thrills"
+	print(payload)
         request = make_request(service, payload)
+	print "saddest thrills"
 
         try:
+	    print "saddest of the saddest of the saddest thrills"
             response = json.dumps(request.execute(), indent=2)
+	    print "saddest of the saddest thrills"
             if not output:
+		print "adventures thrills"
                 print >> sys.stdout, response
+		return response
             else:
+		print "no thrills"
                 path = os.path.join(os.path.dirname(__file__), output)
                 filename = os.path.join(path, os.path.basename(uri) + ".json")
                 print >> open(filename, 'w'), str(response)
@@ -126,9 +151,9 @@ def main(uris, types, max_results, output):
 		server_details = json.load(json_data)
 		json_data.close()
 		if "faceAnnotations" in server_details['responses'][0]:
-       			 print("Intruder Alert")
-		else:
-         		print("You are safe") 
+       			print "Intruder Alert"
+         	else:
+			print "You are safe"
 
 
 

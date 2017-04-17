@@ -95,6 +95,7 @@ def make_request(service, payload):
     return service.images().annotate(body=payload)
 
 def googleapiremote(name):
+
     parser = argparse.ArgumentParser(description="Applies image recognition to images stored on Google Cloud Storage using the Google Cloud Vision API.")
     parser.add_argument('uris', metavar='uri', nargs='*', default="a", help="one or many URIs pointing to images in Google Cloud Storage, e.g. gs://bucket/image.jpg")
     parser.add_argument('-t', dest="detection_types", type=check_detection_type, default=DETECTION_TYPES, help="which detection type(s) to apply: %s (default: all)" % ", ".join(DETECTION_TYPES).lower())
