@@ -94,25 +94,21 @@ def get_payload(uri, types, max_results):
 def make_request(service, payload):
     return service.images().annotate(body=payload)
 
-def googleapiremote():
+def googleapiremote(name):
     parser = argparse.ArgumentParser(description="Applies image recognition to images stored on Google Cloud Storage using the Google Cloud Vision API.")
     parser.add_argument('uris', metavar='uri', nargs='*', default="a", help="one or many URIs pointing to images in Google Cloud Storage, e.g. gs://bucket/image.jpg")
     parser.add_argument('-t', dest="detection_types", type=check_detection_type, default=DETECTION_TYPES, help="which detection type(s) to apply: %s (default: all)" % ", ".join(DETECTION_TYPES).lower())
     parser.add_argument('-m', dest="max_results", default=4, help="maximum number of results to return per detection type (default: 4)")
-    parser.add_argument('-o', dest="output", type=check_output, default=False, help="write output to files in this directory, instead of stdout")
+    parser.add_argument('-o', dest="output", type=check_output, default="output", help="write output to files in this directory, instead of stdout")
     cmd = parser.parse_args()
-    main(cmd.uris, cmd.detection_types, "4", "output")
+    main(name, cmd.detection_types, "4", "output")
 
 
 def main(uris, types, max_results, output):
-    #uris="abc.jpg"
-    #types=DETECTION_TYPES
-    max_results="4"
-    output="output"
-    print(uris)
-    print(types)
-    print(max_results)
-    print(output)
+    #uris="/Users/paramtrivedi/Documents/Google-Vision-Project/Google-Vision-API-quickfix/myproject/a"
+    #types="face_detection"
+    #max_results="4"
+    #output="/Users/paramtrivedi/Documents/Google-Vision-Project/Google-Vision-API-quickfix/output"
     service = get_vision_service()
 
     for uri in uris:
@@ -139,13 +135,14 @@ def main(uris, types, max_results, output):
                 resp = None
                 while resp is None:
                         status, resp = req.next_chunk()
-		#json_data=open(filename)
-		#server_details = json.load(json_data)
-		#json_data.close()
-		#if "faceAnnotations" in server_details['responses'][0]:
-       		#	 print("Intruder Alert")
-		#else:
-         	#	print("You are safe")
+		json_data=open(filename)
+		server_details = json.load(json_data)
+		json_data.close()
+		if "faceAnnotations" in server_details['responses'][0]:
+       			 #print("Intruder Alert")
+                 return("Intruder Alert")
+		else:
+         		print("You are safe")
 
 
 

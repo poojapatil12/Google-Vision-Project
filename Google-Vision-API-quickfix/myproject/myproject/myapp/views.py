@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 
 from myproject.myapp.models import Document
 from myproject.myapp.forms import DocumentForm
-
+from myproject.myapp.visionary import googleapiremote
 import json
 from vis import main, DETECTION_TYPES
 
@@ -15,11 +15,14 @@ def list(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(docfile=request.FILES['docfile'])
-            newdoc.save()
-
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('list'))
+            if '_googleapiclient' in request.POST:
+                print("Google Api Client Test")
+                print(googleapiremote("a"))
+            elif '_upload' in request.POST:
+                newdoc = Document(docfile=request.FILES['docfile'])
+                newdoc.save()
+                # Redirect to the document list after POST
+                return HttpResponseRedirect(reverse('list'))
     else:
         form = DocumentForm()  # A empty, unbound form
 
